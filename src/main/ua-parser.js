@@ -434,6 +434,10 @@
             ], [[NAME, /(.+)/, '$1' + SUFFIX_BROWSER], VERSION], [              // Oculus/Sailfish/VivoBrowser/PicoBrowser
             / HBPC\/([\w\.]+)/                                                  // Huawei Browser
             ], [VERSION, [NAME, HUAWEI + SUFFIX_BROWSER]], [
+            /huaweibrowser\/([\w\.]+)/i                                         // Huawei Browser
+            ], [VERSION, [NAME, HUAWEI + SUFFIX_BROWSER]], [
+            /(arkweb)\/([\w\.]+)/i                                              // ArkWeb
+            ], [NAME, VERSION], [
             /samsungbrowser\/([\w\.]+)/i                                        // Samsung Internet
             ], [VERSION, [NAME, SAMSUNG + ' Internet']], [
             /metasr[\/ ]?([\d\.]+)/i                                            // Sogou Explorer
@@ -606,6 +610,9 @@
             /(?:huawei) ?([-\w ]+)[;\)]/i,
             /\b(nexus 6p|\w{2,4}e?-[atu]?[ln][\dx][\dc][adnt]?)\b(?!.+d\/s)/i
             ], [MODEL, [VENDOR, HUAWEI], [TYPE, MOBILE]], [
+
+            /\(pc; openharmony/i
+            ], [[TYPE, 'desktop']], [
 
             // Xiaomi
             /oid[^\)]+; (2[\dbc]{4}(182|283|rp\w{2})[cgl]|m2105k81a?c)(?: bui|\))/i,
@@ -953,9 +960,6 @@
             /windows.+ edge\/([\w\.]+)/i                                       // EdgeHTML
             ], [VERSION, [NAME, EDGE+'HTML']], [
 
-            /(arkweb)\/([\w\.]+)/i                                              // ArkWeb
-            ], [NAME, VERSION], [
-
             /webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i                         // Blink
             ], [VERSION, [NAME, 'Blink']], [
 
@@ -975,6 +979,11 @@
         ],
 
         os : [[
+            // HarmonyOS
+            /(harmonyos)[\/ ]?([\d\.]*)/i,
+            // OpenHarmony
+            /(openharmony)[\/ ]?([\d\.]*)/i
+            ], [NAME, VERSION], [
 
             // Windows
             /(windows nt) (6\.[23]); arm/i                                      // Windows RT
