@@ -102,6 +102,7 @@
         ZEBRA       = 'Zebra',
 
         // browsers
+        ARKWEB      = 'ArkWeb',
         CHROME      = 'Chrome',
         CHROMIUM    = 'Chromium',
         CHROMECAST  = 'Chromecast',
@@ -434,12 +435,10 @@
             ], [[NAME, /(.+)/, '$1Browser'], VERSION], [
             /(oculus|sailfish|huawei|vivo|pico)browser\/([\w\.]+)/i
             ], [[NAME, /(.+)/, '$1' + SUFFIX_BROWSER], VERSION], [              // Oculus/Sailfish/VivoBrowser/PicoBrowser
-            / HBPC\/([\w\.]+)/                                                  // Huawei Browser
+            / HBPC\/([\w\.]+)/                                                  // Huawei Browser (desktop)
             ], [VERSION, [NAME, HUAWEI + SUFFIX_BROWSER]], [
-            /huaweibrowser\/([\w\.]+)/i                                         // Huawei Browser
-            ], [VERSION, [NAME, HUAWEI + SUFFIX_BROWSER]], [
-            /(arkweb)\/([\w\.]+)/i                                              // ArkWeb
-            ], [NAME, VERSION], [
+            /arkweb\/([\w\.]+)/i                                                // ArkWeb (HarmonyOS WebView)
+            ], [VERSION, [NAME, ARKWEB]], [
             /samsungbrowser\/([\w\.]+)/i                                        // Samsung Internet
             ], [VERSION, [NAME, SAMSUNG + ' Internet']], [
             /metasr[\/ ]?([\d\.]+)/i                                            // Sogou Explorer
@@ -458,15 +457,15 @@
             // WebView
             /((?:fban\/fbios|fb_iab\/fb4a)(?!.+fbav)|;fbav\/([\w\.]+);)/i       // Facebook App for iOS & Android
             ], [[NAME, FACEBOOK], VERSION, [TYPE, INAPP]], [
-            /(kakao(?:talk|story))[\/ ]([\w\.]+)/i,                             // Kakao App
+                                                                                // ChatGPT/Instagram/Kakao/Klarna/Snapchat
+            /(^chatgpt|instagram|kakao(?:talk|story)|klarna|snapchat)[\/ ]([-\w\.]+)/i,
             /(naver)\(.*?(\d+\.[\w\.]+).*\)/i,                                  // Naver InApp
             /(daum)apps[\/ ]([\w\.]+)/i,                                        // Daum App
             /safari (line)\/([\w\.]+)/i,                                        // Line App for iOS
             /\b(line)\/([\w\.]+)\/iab/i,                                        // Line App for Android
             /(alipay)client\/([\w\.]+)/i,                                       // Alipay
             /(twitter)(?:and| f.+e\/([\w\.]+))/i,                               // Twitter
-            /(bing)(?:web|sapphire)\/([\w\.]+)/i,                               // Bing
-            /(instagram|snapchat|klarna)[\/ ]([-\w\.]+)/i                       // Instagram/Snapchat/Klarna
+            /(bing)(?:web|sapphire)\/([\w\.]+)/i                                // Bing
             ], [NAME, VERSION, [TYPE, INAPP]], [
             /\bgsa\/([\w\.]+) .*safari\//i                                      // Google Search Appliance on iOS
             ], [VERSION, [NAME, 'GSA'], [TYPE, INAPP]], [
@@ -612,9 +611,6 @@
             /(?:huawei) ?([-\w ]+)[;\)]/i,
             /\b(nexus 6p|\w{2,4}e?-[atu]?[ln][\dx][\dc][adnt]?)\b(?!.+d\/s)/i
             ], [MODEL, [VENDOR, HUAWEI], [TYPE, MOBILE]], [
-
-            /\(pc; openharmony/i
-            ], [[TYPE, 'desktop']], [
 
             // Xiaomi
             /oid[^\)]+; (2[\dbc]{4}(182|283|rp\w{2})[cgl]|m2105k81a?c)(?: bui|\))/i,
@@ -1027,9 +1023,9 @@
             ], [VERSION, NAME], [                                               
             /(ubuntu) ([\w\.]+) like android/i                                  // Ubuntu Touch
             ], [[NAME, /(.+)/, '$1 Touch'], VERSION], [
-            /(harmonyos)[\/ ]?([\d\.]*)/i,                                      // HarmonyOS
-                                                                                // Android/Blackberry/WebOS/QNX/Bada/RIM/KaiOS/Maemo/MeeGo/S40/Sailfish OS/OpenHarmony/Tizen
-            /(android|bada|blackberry|kaios|maemo|meego|openharmony|qnx|rim tablet os|sailfish|series40|symbian|tizen)\w*[-\/\.; ]?([\d\.]*)/i
+                                                                                // Android/Blackberry/WebOS/QNX/Bada/RIM/KaiOS/Maemo/MeeGo/S40/Sailfish OS/Tizen
+                                                                                // (HarmonyOS & OpenHarmony are matched by the rules at the top of this section)
+            /(android|bada|blackberry|kaios|maemo|meego|qnx|rim tablet os|sailfish|series40|symbian|tizen)\w*[-\/\.; ]?([\d\.]*)/i
             ], [NAME, VERSION], [
             /\(bb(10);/i                                                        // BlackBerry 10
             ], [VERSION, [NAME, BLACKBERRY]], [

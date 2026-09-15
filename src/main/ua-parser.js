@@ -100,6 +100,7 @@
         ZEBRA       = 'Zebra',
 
         // browsers
+        ARKWEB      = 'ArkWeb',
         CHROME      = 'Chrome',
         CHROMIUM    = 'Chromium',
         CHROMECAST  = 'Chromecast',
@@ -432,12 +433,10 @@
             ], [[NAME, /(.+)/, '$1Browser'], VERSION], [
             /(oculus|sailfish|huawei|vivo|pico)browser\/([\w\.]+)/i
             ], [[NAME, /(.+)/, '$1' + SUFFIX_BROWSER], VERSION], [              // Oculus/Sailfish/VivoBrowser/PicoBrowser
-            / HBPC\/([\w\.]+)/                                                  // Huawei Browser
+            / HBPC\/([\w\.]+)/                                                  // Huawei Browser (desktop)
             ], [VERSION, [NAME, HUAWEI + SUFFIX_BROWSER]], [
-            /huaweibrowser\/([\w\.]+)/i                                         // Huawei Browser
-            ], [VERSION, [NAME, HUAWEI + SUFFIX_BROWSER]], [
-            /(arkweb)\/([\w\.]+)/i                                              // ArkWeb
-            ], [NAME, VERSION], [
+            /arkweb\/([\w\.]+)/i                                                // ArkWeb (HarmonyOS WebView)
+            ], [VERSION, [NAME, ARKWEB]], [
             /samsungbrowser\/([\w\.]+)/i                                        // Samsung Internet
             ], [VERSION, [NAME, SAMSUNG + ' Internet']], [
             /metasr[\/ ]?([\d\.]+)/i                                            // Sogou Explorer
@@ -610,9 +609,6 @@
             /(?:huawei) ?([-\w ]+)[;\)]/i,
             /\b(nexus 6p|\w{2,4}e?-[atu]?[ln][\dx][\dc][adnt]?)\b(?!.+d\/s)/i
             ], [MODEL, [VENDOR, HUAWEI], [TYPE, MOBILE]], [
-
-            /\(pc; openharmony/i
-            ], [[TYPE, 'desktop']], [
 
             // Xiaomi
             /oid[^\)]+; (2[\dbc]{4}(182|283|rp\w{2})[cgl]|m2105k81a?c)(?: bui|\))/i,
@@ -1025,9 +1021,9 @@
             ], [VERSION, NAME], [                                               
             /(ubuntu) ([\w\.]+) like android/i                                  // Ubuntu Touch
             ], [[NAME, /(.+)/, '$1 Touch'], VERSION], [
-            /(harmonyos)[\/ ]?([\d\.]*)/i,                                      // HarmonyOS
-                                                                                // Android/Blackberry/WebOS/QNX/Bada/RIM/KaiOS/Maemo/MeeGo/S40/Sailfish OS/OpenHarmony/Tizen
-            /(android|bada|blackberry|kaios|maemo|meego|openharmony|qnx|rim tablet os|sailfish|series40|symbian|tizen)\w*[-\/\.; ]?([\d\.]*)/i
+                                                                                // Android/Blackberry/WebOS/QNX/Bada/RIM/KaiOS/Maemo/MeeGo/S40/Sailfish OS/Tizen
+                                                                                // (HarmonyOS & OpenHarmony are matched by the rules at the top of this section)
+            /(android|bada|blackberry|kaios|maemo|meego|qnx|rim tablet os|sailfish|series40|symbian|tizen)\w*[-\/\.; ]?([\d\.]*)/i
             ], [NAME, VERSION], [
             /\(bb(10);/i                                                        // BlackBerry 10
             ], [VERSION, [NAME, BLACKBERRY]], [

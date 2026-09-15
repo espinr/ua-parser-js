@@ -143,6 +143,9 @@ const AICrawlers = new BotList(Crawlers, 'name', [
     Crawler.META_EXTERNALAGENT,
     Crawler.META_WEBINDEXER,
 
+    // Moonshot AI
+    Crawler.MOONSHOT_KIMIBOT,
+
     // OpenAI
     Crawler.OPENAI_GPTBOT,
     Crawler.OPENAI_SEARCH_BOT,

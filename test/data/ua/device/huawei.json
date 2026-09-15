@@ -981,11 +981,9 @@
         }
     },
     {
-        "desc": "HarmonyOS Next Desktop",
+        "desc": "HarmonyOS Next Desktop (device type intentionally not reported, consistent with other desktop UAs)",
         "ua": "Mozilla/5.0 (PC; OpenHarmony 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 ArkWeb/6.1.0.105",
-        "expect": {
-            "type": "desktop"
-        }
+        "expect": {}
     },
     {
         "desc": "HarmonyOS Next Phone",
