@@ -34,5 +34,14 @@
             "name"    : "macOS",
             "version" : "10.6.8"
         }
+    },
+    {
+        "desc"    : "macOS 26 using Safari 26",
+        "ua"      : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5 Safari/605.1.15",
+        "expect"  :
+        {
+            "name"    : "macOS",
+            "version" : "10.15.7"
+        }
     }
 ]

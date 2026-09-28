@@ -449,6 +449,7 @@
             ], [NAME, VERSION], [
             /(lbbrowser|luakit|rekonq|steam(?= (clie|tenf|gameo)))/i            // LieBao Browser/Luakit/Rekonq/Steam
             ], [NAME], [
+            /version\/([\d\.]+) .+ (brave)$/i,                                  // Brave
             /ome\/([\w\.]+).+(iron(?= saf)|360(?=[es]e$))/i                     // Iron / 360
             ], [VERSION, NAME], [
 
@@ -465,6 +466,8 @@
             /(twitter)(?:and| f.+e\/([\w\.]+))/i,                               // Twitter
             /(bing)(?:web|sapphire)\/([\w\.]+)/i                                // Bing
             ], [NAME, VERSION, [TYPE, INAPP]], [
+            /\bwa(?:4a|ios)[\/ ]([\w\.]+)/i                                     // WhatsApp App for iOS & Android
+            ], [VERSION, [NAME, 'WhatsApp'], [TYPE, INAPP]], [
             /\bgsa\/([\w\.]+) .*safari\//i                                      // Google Search Appliance on iOS
             ], [VERSION, [NAME, 'GSA'], [TYPE, INAPP]], [
             /(?:musical_ly|trill)(?:.+app_?version\/|_)([\w\.]+)/i              // TikTok
@@ -689,7 +692,7 @@
             ], [VENDOR, MODEL], [
 
             // Sony
-            /droid.+; (a?\d[0-2]{2}so|[c-g]\d{4}|so[-gl]\w+|xq-\w\w\d\d)(?= bui|\).+chrome\/(?![1-6]{0,1}\d\.))/i
+            /droid.+; (a?\d{3}so|[c-g]\d{4}|so[-gl]\w+|xq-\w\w\d\d)(?= bui|\).+chrome\/(?![1-6]{0,1}\d\.))/i
             ], [MODEL, [VENDOR, SONY], [TYPE, MOBILE]], [
             /sony tablet [ps]/i,
             /\b(?:sony)?sgp\w+(?: bui|\))/i
@@ -738,7 +741,7 @@
             ], [[VENDOR, lowerize], MODEL, [TYPE, strMapper, { 'tablet' : ['p10001l', 'w7001'], '*' : 'mobile' }]], [
 
             // Acer
-            /droid.+; ([ab][1-7]-?[0178a]\d\d?)/i
+            /droid.+; ([ab][1-7]-?[0178a]\d\d?)( bui|\))/i
             ], [MODEL, [VENDOR, 'Acer'], [TYPE, TABLET]], [
 
             // Meizu
@@ -778,7 +781,7 @@
 
             // Blackview
             /blackview ([-\w ]+)( b|\))/i,
-            /; (bv\d{4}[-\w ]*)( b|\))/i
+            /; (a200 pro|bv\d{4}[-\w ]*)( b|\))/i
             ], [MODEL, [VENDOR, 'Blackview'], [TYPE, MOBILE]], [
 
             // HMD
@@ -1048,9 +1051,12 @@
             /kepler ([\w\.]+); (aft|aeo)/i                                      // Vega OS
             ], [VERSION, [NAME, 'Vega OS']],[
             /(netrange)mmh/i,                                                   // Netrange
-            /(nettv)\/(\d+\.[\w\.]+)/i,                                         // NetTV
+            /(nettv)\/(\d+\.[\w\.]+)/i                                          // NetTV
+            ], [NAME, VERSION], [
 
             // Console
+            /steam ?deck/i                                                      // SteamOS
+            ], [[NAME, 'SteamOS']], [
             /(nintendo|playstation) (\w+)/i,                                    // Nintendo/Playstation
             /(xbox); +xbox ([^\);]+)/i,                                         // Microsoft Xbox (360, One, X, S, Series X, Series S)
             /(pico) .+os([\w\.]+)/i,                                            // Pico
@@ -1302,15 +1308,12 @@
             case OS:
                 // Since iOS 26, Safari's UA reports the OS version as frozen at 18:
                 // https://webkit.org/blog/17333/webkit-features-in-safari-26-0/#update-to-ua-string
-                if (this.get(NAME) == 'iOS' && this.get(VERSION)) {
-                    // Only perform this if iOS version is 18/19
-                    if (/^1[89][^\d]/.exec(this.get(VERSION))) {
-                        // Based on the assumption that "iOS" version is tightly coupled with "Safari" version
-                        var realVersion = /\) Version\/((\d+)[\d\.]*)/.exec(this.ua);
-                        if (realVersion && parseInt(realVersion[2], 10) >= 26) {
-                            // iOS version = Safari version
-                            this.set(VERSION, realVersion[1]);
-                        }
+                if (this.get(NAME) == 'iOS' && this.get(VERSION) && /^1[89][^\d]/.exec(this.get(VERSION))) {
+                    // Based on the assumption that "iOS" version is tightly coupled with "Safari" version
+                    var realVersion = /\) Version\/((\d+)[\d\.]*)/.exec(this.ua);
+                    if (realVersion && parseInt(realVersion[2], 10) >= 26) {
+                        // iOS version = Safari version
+                        this.set(VERSION, realVersion[1]);
                     }
                 }
                 break;
@@ -1449,7 +1452,8 @@
                 var normalized = {};
                 for (var header in headers) {
                     if (headers.hasOwnProperty(header)) {
-                        normalized[String(header).toLowerCase()] = headers[header];
+                        var value = headers[header];
+                        normalized[String(header).toLowerCase()] = Array.isArray(value) ? value.join(', ') : value;
                     }
                 }
                 headers = normalized;
